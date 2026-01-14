@@ -1,0 +1,706 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard | BakeHub</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #fff8f0 0%, #ffe8e8 100%);
+            color: #333;
+            min-height: 100vh;
+        }
+
+        /* Navigation */
+        .navbar {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            padding: 1.2rem 0;
+            box-shadow: 0 2px 20px rgba(0, 0, 0, 0.1);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .nav-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-family: 'Playfair Display', serif;
+            font-size: 2rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, #ff6b9d 0%, #c86dd7 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-decoration: none;
+        }
+
+        .nav-menu {
+            display: flex;
+            list-style: none;
+            gap: 2rem;
+            align-items: center;
+        }
+
+        .nav-menu a {
+            text-decoration: none;
+            color: #555;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        .nav-menu a:hover,
+        .nav-menu a.active {
+            color: #ff6b9d;
+        }
+
+        /* Page Header */
+        .page-header {
+            max-width: 1400px;
+            margin: 3rem auto;
+            padding: 2rem 2rem 1rem;
+        }
+
+        .page-header h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: 3rem;
+            background: linear-gradient(135deg, #ff6b9d 0%, #c86dd7 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 0.5rem;
+        }
+
+        .page-header p {
+            color: #666;
+            font-size: 1.1rem;
+        }
+
+        /* Admin Container */
+        .admin-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: 1fr 2fr;
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+
+        /* Add Dessert Form */
+        .add-dessert-card {
+            background: white;
+            border-radius: 20px;
+            padding: 2.5rem;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+            height: fit-content;
+        }
+
+        .add-dessert-card h2 {
+            font-family: 'Playfair Display', serif;
+            font-size: 2rem;
+            color: #333;
+            margin-bottom: 2rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: #555;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 1rem;
+            border: 2px solid #f0f0f0;
+            border-radius: 12px;
+            font-family: 'Poppins', sans-serif;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            background: #fafafa;
+        }
+
+        .form-group input:focus {
+            outline: none;
+            border-color: #ff6b9d;
+            background: white;
+            box-shadow: 0 0 0 3px rgba(255, 107, 157, 0.1);
+        }
+
+        .submit-btn {
+            width: 100%;
+            padding: 1rem;
+            background: linear-gradient(135deg, #ff6b9d 0%, #c86dd7 100%);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 20px rgba(255, 107, 157, 0.3);
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(255, 107, 157, 0.4);
+        }
+
+        .submit-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+        /* Stats Cards */
+        .stats-container {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .stat-card {
+            background: white;
+            padding: 2rem;
+            border-radius: 15px;
+            box-shadow: 0 5px 25px rgba(0, 0, 0, 0.08);
+            transition: all 0.3s ease;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 35px rgba(0, 0, 0, 0.12);
+        }
+
+        .stat-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .stat-icon {
+            font-size: 2rem;
+        }
+
+        .stat-number {
+            font-size: 2.5rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, #ff6b9d 0%, #c86dd7 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .stat-label {
+            color: #666;
+            font-size: 1rem;
+            margin-top: 0.5rem;
+        }
+
+        /* Desserts Management */
+        .desserts-management {
+            background: white;
+            border-radius: 20px;
+            padding: 2.5rem;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+        }
+
+        .desserts-management h2 {
+            font-family: 'Playfair Display', serif;
+            font-size: 2rem;
+            color: #333;
+            margin-bottom: 2rem;
+        }
+
+        .desserts-table {
+            width: 100%;
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        thead {
+            background: linear-gradient(135deg, #ff6b9d 0%, #c86dd7 100%);
+            color: white;
+        }
+
+        th {
+            padding: 1rem;
+            text-align: left;
+            font-weight: 600;
+        }
+
+        td {
+            padding: 1rem;
+            border-bottom: 1px solid #f0f0f0;
+        }
+
+        tbody tr {
+            transition: all 0.3s ease;
+        }
+
+        tbody tr:hover {
+            background: #fff8f0;
+        }
+
+        .dessert-img {
+            width: 60px;
+            height: 60px;
+            object-fit: cover;
+            border-radius: 8px;
+        }
+
+        .status-badge {
+            display: inline-block;
+            padding: 0.4rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+        }
+
+        .status-available {
+            background: #d4edda;
+            color: #155724;
+        }
+
+        .status-sold-out {
+            background: #f8d7da;
+            color: #721c24;
+        }
+
+        .status-delivered {
+            background: #d1ecf1;
+            color: #0c5460;
+        }
+
+        .action-btn {
+            padding: 0.5rem 1rem;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            margin-right: 0.5rem;
+        }
+
+        .deliver-btn {
+            background: #28a745;
+            color: white;
+        }
+
+        .deliver-btn:hover {
+            background: #218838;
+            transform: translateY(-2px);
+        }
+
+        .delete-btn {
+            background: #dc3545;
+            color: white;
+        }
+
+        .delete-btn:hover {
+            background: #c82333;
+            transform: translateY(-2px);
+        }
+
+        .loading {
+            text-align: center;
+            padding: 3rem;
+            color: #999;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 3rem;
+            color: #999;
+        }
+
+        .empty-state-icon {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+        }
+
+        /* Responsive */
+        @media (max-width: 1200px) {
+            .dashboard-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .stats-container {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .page-header h1 {
+                font-size: 2rem;
+            }
+
+            .add-dessert-card,
+            .desserts-management {
+                padding: 1.5rem;
+            }
+
+            .desserts-table {
+                font-size: 0.9rem;
+            }
+
+            th, td {
+                padding: 0.5rem;
+            }
+
+            .nav-menu {
+                gap: 1rem;
+                font-size: 0.9rem;
+            }
+
+            .logo {
+                font-size: 1.5rem;
+            }
+        }
+
+        /* Toast Notification */
+        .toast {
+            position: fixed;
+            top: 100px;
+            right: 20px;
+            background: white;
+            padding: 1rem 1.5rem;
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            display: none;
+            align-items: center;
+            gap: 1rem;
+            z-index: 2000;
+            animation: slideIn 0.3s ease;
+        }
+
+        .toast.show {
+            display: flex;
+        }
+
+        .toast.success {
+            border-left: 4px solid #28a745;
+        }
+
+        .toast.error {
+            border-left: 4px solid #dc3545;
+        }
+
+        @keyframes slideIn {
+            from {
+                transform: translateX(400px);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div id="toast" class="toast"></div>
+
+    <header>
+        <nav class="navbar">
+            <div class="nav-container">
+                <a href="index.html" class="logo">🍰 BakeHub</a>
+                <ul class="nav-menu">
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="about.html">About</a></li>
+                    <li><a href="contact.html">Contact</a></li>
+                    <li><a href="cart.html">🛒 Cart</a></li>
+                    <li><a href="admin.html" class="active">Admin</a></li>
+                </ul>
+            </div>
+        </nav>
+    </header>
+
+    <section class="page-header">
+        <h1>🎯 Admin Dashboard</h1>
+        <p>Manage your desserts and track your business</p>
+    </section>
+
+    <div class="admin-container">
+        <!-- Stats Section -->
+        <div class="stats-container">
+            <div class="stat-card">
+                <div class="stat-header">
+                    <span class="stat-icon">🍰</span>
+                </div>
+                <div class="stat-number" id="totalDesserts">0</div>
+                <div class="stat-label">Total Desserts</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-header">
+                    <span class="stat-icon">✅</span>
+                </div>
+                <div class="stat-number" id="availableDesserts">0</div>
+                <div class="stat-label">Available</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-header">
+                    <span class="stat-icon">🚚</span>
+                </div>
+                <div class="stat-number" id="deliveredDesserts">0</div>
+                <div class="stat-label">Delivered</div>
+            </div>
+        </div>
+
+        <div class="dashboard-grid">
+            <!-- Add Dessert Form -->
+            <div class="add-dessert-card">
+                <h2>➕ Add New Dessert</h2>
+                <form id="addDessertForm">
+                    <div class="form-group">
+                        <label for="dessertName">Dessert Name *</label>
+                        <input type="text" id="dessertName" placeholder="e.g., Chocolate Cake" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="dessertPrice">Price (₹) *</label>
+                        <input type="number" id="dessertPrice" placeholder="e.g., 499" min="0" step="0.01" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="dessertImage">Image URL *</label>
+                        <input type="url" id="dessertImage" placeholder="https://example.com/image.jpg" required>
+                    </div>
+
+                    <button type="submit" class="submit-btn" id="submitBtn">Add Dessert</button>
+                </form>
+            </div>
+
+            <!-- Quick Actions / Preview -->
+            <div class="desserts-management">
+                <h2>📊 Recent Activity</h2>
+                <div style="padding: 2rem; text-align: center; color: #999;">
+                    <div style="font-size: 3rem; margin-bottom: 1rem;">📈</div>
+                    <p>Your desserts will appear in the table below</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Desserts Management Table -->
+        <div class="desserts-management">
+            <h2>🍰 Manage Desserts</h2>
+            <div class="desserts-table">
+                <table id="dessertsTable">
+                    <thead>
+                        <tr>
+                            <th>Image</th>
+                            <th>Name</th>
+                            <th>Price</th>
+                            <th>Status</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="dessertsTableBody">
+                        <tr>
+                            <td colspan="5" class="loading">Loading desserts...</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Toast Notification
+        function showToast(message, type = 'success') {
+            const toast = document.getElementById('toast');
+            toast.textContent = message;
+            toast.className = `toast ${type} show`;
+            setTimeout(() => {
+                toast.classList.remove('show');
+            }, 3000);
+        }
+
+        // Update Stats
+        function updateStats(desserts) {
+            document.getElementById('totalDesserts').textContent = desserts.length;
+            document.getElementById('availableDesserts').textContent = 
+                desserts.filter(d => d.status === 'available').length;
+            document.getElementById('deliveredDesserts').textContent = 
+                desserts.filter(d => d.status === 'delivered').length;
+        }
+
+        // Load Desserts
+        async function loadDesserts() {
+            try {
+                const response = await fetch('http://localhost:3000/desserts');
+                const desserts = await response.json();
+
+                updateStats(desserts);
+
+                const tbody = document.getElementById('dessertsTableBody');
+                tbody.innerHTML = '';
+
+                if (desserts.length === 0) {
+                    tbody.innerHTML = `
+                        <tr>
+                            <td colspan="5" class="empty-state">
+                                <div class="empty-state-icon">🍪</div>
+                                <p>No desserts yet. Add your first dessert above!</p>
+                            </td>
+                        </tr>
+                    `;
+                    return;
+                }
+
+                desserts.forEach(dessert => {
+                    const row = document.createElement('tr');
+                    const statusClass = `status-${dessert.status.replace(' ', '-')}`;
+                    const statusText = dessert.status.charAt(0).toUpperCase() + dessert.status.slice(1);
+
+                    row.innerHTML = `
+                        <td><img src="${dessert.image_url}" alt="${dessert.name}" class="dessert-img" onerror="this.src='https://via.placeholder.com/60/ffb6b9/ffffff?text=🍰'"></td>
+                        <td><strong>${dessert.name}</strong></td>
+                        <td>₹${parseFloat(dessert.price).toFixed(2)}</td>
+                        <td><span class="status-badge ${statusClass}">${statusText}</span></td>
+                        <td>
+                            ${dessert.status === 'available' ? 
+                                `<button class="action-btn deliver-btn" onclick="markDelivered(${dessert.id})">Mark Delivered</button>` : 
+                                ''}
+                            <button class="action-btn delete-btn" onclick="deleteDessert(${dessert.id})">Delete</button>
+                        </td>
+                    `;
+                    tbody.appendChild(row);
+                });
+            } catch (error) {
+                console.error('Error loading desserts:', error);
+                const tbody = document.getElementById('dessertsTableBody');
+                tbody.innerHTML = `
+                    <tr>
+                        <td colspan="5" class="empty-state">
+                            <div class="empty-state-icon">⚠️</div>
+                            <p>Unable to load desserts. Please check if the server is running.</p>
+                        </td>
+                    </tr>
+                `;
+            }
+        }
+
+        // Add Dessert
+        document.getElementById('addDessertForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            const name = document.getElementById('dessertName').value.trim();
+            const price = document.getElementById('dessertPrice').value;
+            const image_url = document.getElementById('dessertImage').value.trim();
+
+            const submitBtn = document.getElementById('submitBtn');
+            submitBtn.disabled = true;
+            submitBtn.textContent = 'Adding...';
+
+            try {
+                const response = await fetch('http://localhost:3000/desserts', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ name, price, image_url })
+                });
+
+                const result = await response.json();
+
+                if (response.ok) {
+                    showToast('✅ Dessert added successfully!', 'success');
+                    document.getElementById('addDessertForm').reset();
+                    loadDesserts();
+                } else {
+                    showToast(result.message || '❌ Failed to add dessert', 'error');
+                }
+            } catch (error) {
+                console.error('Error adding dessert:', error);
+                showToast('❌ Unable to add dessert. Please try again.', 'error');
+            } finally {
+                submitBtn.disabled = false;
+                submitBtn.textContent = 'Add Dessert';
+            }
+        });
+
+        // Mark as Delivered
+        async function markDelivered(id) {
+            if (!confirm('Mark this dessert as delivered?')) return;
+
+            try {
+                const response = await fetch(`http://localhost:3000/desserts/${id}/deliver`, {
+                    method: 'PUT'
+                });
+
+                const result = await response.json();
+
+                if (response.ok) {
+                    showToast('🚚 Dessert marked as delivered!', 'success');
+                    loadDesserts();
+                } else {
+                    showToast(result.message || '❌ Failed to update status', 'error');
+                }
+            } catch (error) {
+                console.error('Error updating status:', error);
+                showToast('❌ Unable to update status', 'error');
+            }
+        }
+
+        // Delete Dessert
+        async function deleteDessert(id) {
+            if (!confirm('Are you sure you want to delete this dessert?')) return;
+
+            try {
+                const response = await fetch(`http://localhost:3000/desserts/${id}`, {
+                    method: 'DELETE'
+                });
+
+                const result = await response.json();
+
+                if (response.ok) {
+                    showToast('🗑️ Dessert deleted successfully!', 'success');
+                    loadDesserts();
+                } else {
+                    showToast(result.message || '❌ Failed to delete dessert', 'error');
+                }
+            } catch (error) {
+                console.error('Error deleting dessert:', error);
+                showToast('❌ Unable to delete dessert', 'error');
+            }
+        }
+
+        // Load desserts on page load
+        loadDesserts();
+    </script>
+</body>
+</html>

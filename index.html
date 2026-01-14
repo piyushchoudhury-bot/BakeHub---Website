@@ -1,0 +1,599 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BakeHub - Homemade Dessert Marketplace</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #fff8f0 0%, #ffe8e8 100%);
+            color: #333;
+            min-height: 100vh;
+        }
+
+        /* Navigation */
+        .navbar {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            padding: 1.2rem 0;
+            box-shadow: 0 2px 20px rgba(0, 0, 0, 0.1);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-family: 'Playfair Display', serif;
+            font-size: 2rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, #ff6b9d 0%, #c86dd7 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .nav-menu {
+            display: flex;
+            list-style: none;
+            gap: 2rem;
+            align-items: center;
+        }
+
+        .nav-menu a {
+            text-decoration: none;
+            color: #555;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .nav-menu a:hover,
+        .nav-menu a.active {
+            color: #ff6b9d;
+        }
+
+        .nav-menu a::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: linear-gradient(135deg, #ff6b9d 0%, #c86dd7 100%);
+            transition: width 0.3s ease;
+        }
+
+        .nav-menu a:hover::after,
+        .nav-menu a.active::after {
+            width: 100%;
+        }
+
+        .admin-link {
+            background: linear-gradient(135deg, #ff6b9d 0%, #c86dd7 100%);
+            color: white !important;
+            padding: 0.5rem 1.5rem;
+            border-radius: 25px;
+            transition: all 0.3s ease;
+        }
+
+        .admin-link:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(255, 107, 157, 0.4);
+        }
+
+        .admin-link::after {
+            display: none;
+        }
+
+        /* Hero Section */
+        .hero {
+            max-width: 1200px;
+            margin: 3rem auto;
+            padding: 4rem 2rem;
+            text-align: center;
+        }
+
+        .hero-content h2 {
+            font-family: 'Playfair Display', serif;
+            font-size: 3rem;
+            background: linear-gradient(135deg, #ff6b9d 0%, #c86dd7 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 1rem;
+            line-height: 1.2;
+        }
+
+        .hero-content p {
+            font-size: 1.2rem;
+            color: #666;
+            margin-bottom: 2rem;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .cta-button {
+            display: inline-block;
+            background: linear-gradient(135deg, #ff6b9d 0%, #c86dd7 100%);
+            color: white;
+            padding: 1rem 3rem;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 1.1rem;
+            transition: all 0.3s ease;
+            box-shadow: 0 10px 30px rgba(255, 107, 157, 0.3);
+        }
+
+        .cta-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 40px rgba(255, 107, 157, 0.4);
+        }
+
+        /* Products Section */
+        .products {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 3rem 2rem;
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .section-header h2 {
+            font-family: 'Playfair Display', serif;
+            font-size: 2.5rem;
+            color: #333;
+            margin-bottom: 0.5rem;
+        }
+
+        .section-header p {
+            color: #666;
+            font-size: 1.1rem;
+        }
+
+        .desserts-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 2rem;
+        }
+
+        .loading {
+            grid-column: 1 / -1;
+            text-align: center;
+            padding: 3rem;
+            color: #999;
+            font-size: 1.2rem;
+        }
+
+        .dessert-card {
+            background: white;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 5px 25px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .dessert-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.15);
+        }
+
+        .dessert-card img {
+            width: 100%;
+            height: 220px;
+            object-fit: cover;
+            transition: transform 0.3s ease;
+        }
+
+        .dessert-card:hover img {
+            transform: scale(1.1);
+        }
+
+        .dessert-info {
+            padding: 1.5rem;
+        }
+
+        .dessert-info h3 {
+            font-size: 1.4rem;
+            margin-bottom: 0.5rem;
+            color: #333;
+        }
+
+        .price {
+            font-size: 1.5rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, #ff6b9d 0%, #c86dd7 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 0.5rem;
+        }
+
+        .status-badge {
+            display: inline-block;
+            padding: 0.4rem 1rem;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+        }
+
+        .status-available {
+            background: #d4edda;
+            color: #155724;
+        }
+
+        .status-sold-out {
+            background: #f8d7da;
+            color: #721c24;
+        }
+
+        .status-delivered {
+            background: #d1ecf1;
+            color: #0c5460;
+        }
+
+        .order-btn {
+            width: 100%;
+            padding: 0.8rem;
+            background: linear-gradient(135deg, #ff6b9d 0%, #c86dd7 100%);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .order-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(255, 107, 157, 0.4);
+        }
+
+        /* Features Section */
+        .features {
+            max-width: 1200px;
+            margin: 4rem auto;
+            padding: 3rem 2rem;
+        }
+
+        .features-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+        }
+
+        .feature-card {
+            background: white;
+            padding: 2rem;
+            border-radius: 20px;
+            text-align: center;
+            box-shadow: 0 5px 25px rgba(0, 0, 0, 0.08);
+            transition: all 0.3s ease;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 35px rgba(0, 0, 0, 0.12);
+        }
+
+        .feature-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            display: block;
+        }
+
+        .feature-card h3 {
+            font-size: 1.5rem;
+            margin-bottom: 0.5rem;
+            color: #333;
+        }
+
+        .feature-card p {
+            color: #666;
+            line-height: 1.6;
+        }
+
+        /* Footer */
+        footer {
+            background: linear-gradient(135deg, #ff6b9d 0%, #c86dd7 100%);
+            color: white;
+            padding: 2rem;
+            margin-top: 4rem;
+        }
+
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        .footer-content p {
+            margin: 0.5rem 0;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .hero-content h2 {
+                font-size: 2rem;
+            }
+
+            .hero-content p {
+                font-size: 1rem;
+            }
+
+            .nav-menu {
+                gap: 1rem;
+                font-size: 0.9rem;
+            }
+
+            .logo {
+                font-size: 1.5rem;
+            }
+
+            .desserts-grid {
+                grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <nav class="navbar">
+            <div class="nav-container">
+                <h1 class="logo">🍰 BakeHub</h1>
+                <ul class="nav-menu">
+                    <li><a href="index.html" class="active">Home</a></li>
+                    <li><a href="about.html">About</a></li>
+                    <li><a href="contact.html">Contact</a></li>
+                    <li><a href="cart.html">🛒 Cart</a></li>
+                    <li><a href="admin.html" class="admin-link">Admin</a></li>
+                </ul>
+            </div>
+        </nav>
+    </header>
+
+    <section class="hero">
+        <div class="hero-content">
+            <h2>Bringing Homemade Sweetness to Your Doorstep!</h2>
+            <p>Discover authentic homemade cakes, cookies, and pastries made with love by local bakers.</p>
+            <a href="#desserts" class="cta-button">Browse Desserts</a>
+        </div>
+    </section>
+
+    <section class="products" id="desserts">
+        <div class="section-header">
+            <h2>Fresh Homemade Desserts</h2>
+            <p>Handcrafted treats from our talented bakers</p>
+        </div>
+        <div id="dessertsContainer" class="desserts-grid">
+            <div class="loading">Loading delicious desserts...</div>
+        </div>
+    </section>
+
+    <section class="features">
+        <div class="features-container">
+            <div class="feature-card">
+                <span class="feature-icon">👩‍🍳</span>
+                <h3>Local Bakers</h3>
+                <p>Support talented home bakers in your community</p>
+            </div>
+            <div class="feature-card">
+                <span class="feature-icon">🎂</span>
+                <h3>Fresh Daily</h3>
+                <p>All desserts made fresh to order with quality ingredients</p>
+            </div>
+            <div class="feature-card">
+                <span class="feature-icon">🚚</span>
+                <h3>Quick Delivery</h3>
+                <p>Fast and reliable delivery right to your door</p>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="footer-content">
+            <p>&copy; 2026 BakeHub. All Rights Reserved.</p>
+            <p>Made with ❤️ for dessert lovers everywhere</p>
+        </div>
+    </footer>
+
+    <script>
+        // Load Desserts
+        async function loadDesserts() {
+            try {
+                const response = await fetch("http://localhost:3000/desserts");
+                const desserts = await response.json();
+
+                const container = document.getElementById("dessertsContainer");
+                container.innerHTML = "";
+
+                if (desserts.length === 0) {
+                    container.innerHTML = '<div class="loading">No desserts available yet. Check back soon! 🍪</div>';
+                    return;
+                }
+
+                desserts.forEach(item => {
+                    const div = document.createElement("div");
+                    div.classList.add("dessert-card");
+
+                    const statusClass = `status-${item.status.replace(' ', '-')}`;
+                    const statusText = item.status.charAt(0).toUpperCase() + item.status.slice(1);
+
+                    div.innerHTML = `
+                        <img src="${item.image_url}" alt="${item.name}" onerror="this.src='https://via.placeholder.com/300x220/ffb6b9/ffffff?text=Dessert'">
+                        <div class="dessert-info">
+                            <h3>${item.name}</h3>
+                            <p class="price">₹${parseFloat(item.price).toFixed(2)}</p>
+                            <span class="status-badge ${statusClass}">${statusText}</span>
+                            ${item.status === 'available' ? `<button class="order-btn" onclick="orderDessert(${item.id}, '${item.name.replace(/'/g, "\\'")}')">Order Now</button>` : ''}
+                        </div>
+                    `;
+
+                    container.appendChild(div);
+                });
+            } catch (error) {
+                console.error("Error loading desserts:", error);
+                const container = document.getElementById("dessertsContainer");
+                container.innerHTML = '<div class="loading">⚠️ Unable to load desserts. Please check if the server is running.</div>';
+            }
+        }
+
+        // Order Dessert
+        async function orderDessert(id, name) {
+            const customer_name = prompt(`Enter your name to order ${name}:`);
+            if (!customer_name) return;
+
+            const customer_email = prompt("Enter your email:");
+            if (!customer_email) return;
+
+            const quantity = prompt("Quantity:", "1");
+            if (!quantity) return;
+
+            try {
+                const res = await fetch("http://localhost:3000/orders", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ 
+                        dessert_id: id, 
+                        customer_name, 
+                        customer_email, 
+                        quantity: parseInt(quantity)
+                    })
+                });
+
+                const result = await res.json();
+                alert(result.message);
+                
+                if (res.ok) {
+                    loadDesserts();
+                }
+            } catch (error) {
+                console.error("Error placing order:", error);
+                alert("❌ Could not place order. Please try again.");
+            }
+        }
+
+        // Load desserts on page load
+        if (document.getElementById("dessertsContainer")) {
+            loadDesserts();
+        }
+
+        // Smooth scroll for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
+            });
+        });
+    </script>
+</body>
+</html>
+
+<script>
+    // Load Desserts
+    async function loadDesserts() {
+        try {
+            const response = await fetch("http://localhost:3000/desserts");
+            const desserts = await response.json();
+
+            const container = document.getElementById("dessertsContainer");
+            container.innerHTML = "";
+
+            if (desserts.length === 0) {
+                container.innerHTML = '<div class="loading">No desserts available yet. Check back soon! 🍪</div>';
+                return;
+            }
+
+            desserts.forEach(item => {
+                const div = document.createElement("div");
+                div.classList.add("dessert-card");
+
+                const statusClass = `status-${item.status.replace(' ', '-')}`;
+                const statusText = item.status.charAt(0).toUpperCase() + item.status.slice(1);
+
+                div.innerHTML = `
+                    <img src="${item.image_url}" alt="${item.name}" onerror="this.src='https://via.placeholder.com/300x220/ffb6b9/ffffff?text=Dessert'">
+                    <div class="dessert-info">
+                        <h3>${item.name}</h3>
+                        <p class="price">₹${parseFloat(item.price).toFixed(2)}</p>
+                        <span class="status-badge ${statusClass}">${statusText}</span>
+                        ${item.status === 'available' ? `<button class="order-btn" onclick="addToCart(${item.id}, '${item.name.replace(/'/g, "\\'")}', ${item.price}, '${item.image_url.replace(/'/g, "\\'")}')">🛒 Add to Cart</button>` : ''}
+                    </div>
+                `;
+
+                container.appendChild(div);
+            });
+        } catch (error) {
+            console.error("Error loading desserts:", error);
+            const container = document.getElementById("dessertsContainer");
+            container.innerHTML = '<div class="loading">⚠️ Unable to load desserts. Please check if the server is running.</div>';
+        }
+    }
+
+    // Add to Cart Function
+    function addToCart(id, name, price, image_url) {
+        let cart = JSON.parse(localStorage.getItem('cart')) || [];
+        
+        const existingItem = cart.find(item => item.id === id);
+        
+        if (existingItem) {
+            existingItem.quantity += 1;
+            alert(`${name} quantity updated in cart! 🛒`);
+        } else {
+            cart.push({
+                id: id,
+                name: name,
+                price: parseFloat(price),
+                image_url: image_url,
+                quantity: 1
+            });
+            alert(`${name} added to cart! 🛒`);
+        }
+        
+        localStorage.setItem('cart', JSON.stringify(cart));
+    }
+
+    // Load desserts on page load
+    loadDesserts();
+
+    // Smooth scroll for anchor links
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', function (e) {
+            e.preventDefault();
+            const target = document.querySelector(this.getAttribute('href'));
+            if (target) {
+                target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }
+        });
+    });
+</script>
