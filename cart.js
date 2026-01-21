@@ -69,7 +69,8 @@ async function checkout() {
     }
 
     try {
-      const res = await fetch("http://localhost:3000/orders", {
+      const res = await fetch("https://bakehub-backend.onrender.com/orders", {
+
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(orderData)
@@ -89,3 +90,4 @@ async function checkout() {
 
 checkoutBtn.addEventListener("click", checkout);
 renderCart();
+
