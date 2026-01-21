@@ -31,7 +31,9 @@ async function loadDesserts() {
 // Add New Dessert (Admin)
 // =========================
 async function addDessert(name, price, image_url) {
-    const response = await fetch("http://localhost:3000/desserts", {
+    const response = await fetch(`https://bakehub-backend.onrender.com/desserts/${id}/deliver`, { method: "PUT" });
+
+
         method: "POST",
         headers: {"Content-Type": "application/json"},
         body: JSON.stringify({ name, price, image_url })
@@ -70,7 +72,8 @@ async function orderDessert(id, name) {
     }
 
     try {
-        const res = await fetch("http://localhost:3000/orders", {
+        const res = await fetch("https://bakehub-backend.onrender.com/orders", {
+
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ dessert_id: id, customer_name, customer_email, quantity })
@@ -83,4 +86,5 @@ async function orderDessert(id, name) {
         alert("❌ Could not place order. Please try again.");
     }
 }
+
 
