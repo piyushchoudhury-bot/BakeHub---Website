@@ -56,7 +56,7 @@ const cors = require("cors");
 const path = require("path");
 
 const app = express();
-const PORT = 3000;
+const PORT = process.env.PORT || 3000;
 
 // Middleware
 app.use(cors());
@@ -422,4 +422,5 @@ app.listen(PORT, () => {
     console.log(`🚀 Server running at http://localhost:${PORT}`);
     console.log(`📁 Serving static files from ${__dirname}`);
     console.log(`🍰 BakeHub API is ready!`);
+
 });
