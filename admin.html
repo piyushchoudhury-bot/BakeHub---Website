@@ -572,7 +572,7 @@
         // Load Desserts
         async function loadDesserts() {
             try {
-                const response = await fetch('http://localhost:3000/desserts');
+                const response = await fetch('https://bakehub-website-1.onrender.com');
                 const desserts = await response.json();
 
                 updateStats(desserts);
@@ -714,3 +714,4 @@
 </body>
 
 </html>
+
