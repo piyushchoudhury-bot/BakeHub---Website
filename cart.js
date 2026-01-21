@@ -69,7 +69,7 @@ async function checkout() {
     }
 
     try {
-      const res = await fetch("https://bakehub-website-1.onrender.com/orders", {
+      const res = await fetch("https://bakehub-website-1.onrender.com/orders",  {
 
         method: "POST",
         headers: { "Content-Type": "application/json" },
