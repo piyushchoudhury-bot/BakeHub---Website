@@ -667,7 +667,7 @@
             if (!confirm('Mark this dessert as delivered?')) return;
 
             try {
-                const response = await fetch(`http://localhost:3000/desserts/${id}/deliver`, {
+                const response = await fetch("https://bakehub-website-1.onrender.com/desserts", {
                     method: 'PUT'
                 });
 
@@ -690,7 +690,7 @@
             if (!confirm('Are you sure you want to delete this dessert?')) return;
 
             try {
-                const response = await fetch(`http://localhost:3000/desserts/${id}`, {
+                const response = await fetch("https://bakehub-website-1.onrender.com/desserts", {
                     method: 'DELETE'
                 });
 
