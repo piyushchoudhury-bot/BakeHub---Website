@@ -2,7 +2,7 @@
 // Load Desserts on Homepage
 // =========================
 async function loadDesserts() {
-    const response = await fetch("https://bakehub-backend.onrender.com/desserts");
+    const response = await fetch("https://bakehub-website-1.onrender.com/desserts");
 
     const desserts = await response.json();
 
@@ -86,5 +86,6 @@ async function orderDessert(id, name) {
         alert("❌ Could not place order. Please try again.");
     }
 }
+
 
 
